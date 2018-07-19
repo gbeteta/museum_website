@@ -1,0 +1,36 @@
+{% extends 'exhibitions/base.html' %}
+
+{% block content %}
+    <form action="/search_artifacts/" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-primary" value="Search"/>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Exhibition</th>
+                <th>Discovery Year</th>
+                <th>Condition</th>
+                <th>Material</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        
+            {% for result in results %}
+                <tr>
+                    <th scope="row"><a href="/item/{{ result.pk }}">{{ result.name }}</a></th>
+                    <th>{{ result.exhibition }}</th>
+                    <th>{{ result.discovery_year }}</th>
+                    <th>{{ result.condition }}</th>
+                    <th>{{ result.material }}</th>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+{% endblock %}
