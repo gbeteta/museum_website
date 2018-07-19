@@ -32,8 +32,8 @@ def search_artifacts(request):
             if form.cleaned_data["material"]:
                 results = results.filter(material__iexact=form.cleaned_data["material"])
 
-            return render(request, 'exhibitions/results_artifacts.html', {'form': form, 'results': results})
+            return render(request, 'exhibitions/search_artifacts.html', {'form': form, 'results': results})
     else:
         form = SearchArtifactsForm()
 
-    return render(request, 'exhibitions/search_artifacts.html', {'form': form})
+    return render(request, 'exhibitions/search_artifacts.html', {'form': form, 'results':{}})
