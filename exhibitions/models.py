@@ -1,7 +1,16 @@
 from django.db import models
 
+CONDITION_CHOICES = [
+    (1, ("Preserved"),),
+    (2, ("Fair"),),
+    (3, ("Damaged"),)
+]
+
 class Gallery(models.Model):
     name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name_plural = "Galleries"
@@ -14,6 +23,9 @@ class Exhibition(models.Model):
     active = models.BooleanField()
     gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.name
+
 class Item(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField('Item description')
@@ -24,7 +36,7 @@ class Artifact(Item):
     country_origin = models.CharField(max_length=100)
     excavation_site = models.CharField(max_length=150)
     discovery_year = models.IntegerField('Year artifact was discovered')
-    condition = models.CharField(max_length=50)
+    condition = models.IntegerField(choices=CONDITION_CHOICES)
     material = models.CharField(max_length=50)
 
 class Organism(Item):
