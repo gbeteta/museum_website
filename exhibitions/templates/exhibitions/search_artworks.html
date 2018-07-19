@@ -1,7 +1,7 @@
 {% extends 'exhibitions/base.html' %}
 
 {% block content %}
-    <form action="/search_artifacts/" method="POST">
+    <form action="/search_artworks/" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" class="btn btn-primary" value="Search"/>
@@ -11,9 +11,8 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Discovery Year</th>
-                <th>Condition</th>
-                <th>Material</th>
+                <th>Author</th>
+                <th>Year</th>
                 <th>Exhibition</th>
             </tr>
         </thead>
@@ -23,10 +22,9 @@
             {% for result in results %}
                 <tr>
                     <th scope="row"><a href="/item/{{ result.pk }}">{{ result.name }}</a></th>
-                    <th>{{ result.discovery_year }}</th>
-                    <th>{{ result.get_condition_display }}</th>
-                    <th>{{ result.material }}</th>
+                    <th>{{ result.author }}</th>
                     <th>{{ result.exhibition }}</th>
+                    <th>{{ result.year }}</th>
                 </tr>
             {% endfor %}
 
