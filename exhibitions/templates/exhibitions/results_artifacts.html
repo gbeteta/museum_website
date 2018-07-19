@@ -25,7 +25,7 @@
                     <th scope="row"><a href="/item/{{ result.pk }}">{{ result.name }}</a></th>
                     <th>{{ result.exhibition }}</th>
                     <th>{{ result.discovery_year }}</th>
-                    <th>{{ result.condition }}</th>
+                    <th>{{ result.get_condition_display }}</th>
                     <th>{{ result.material }}</th>
                 </tr>
             {% endfor %}
