@@ -23,7 +23,7 @@ class Item(models.Model):
 class Artifact(Item):
     country_origin = models.CharField(max_length=100)
     excavation_site = models.CharField(max_length=150)
-    discovery_date = models.DateField('Date artifact was discovered')
+    discovery_year = models.IntegerField('Year artifact was discovered')
     condition = models.CharField(max_length=50)
     material = models.CharField(max_length=50)
 
@@ -34,7 +34,7 @@ class Organism(Item):
 class Fossil(Item):
     country_origin = models.CharField(max_length=100)
     excavation_site = models.CharField(max_length=150)
-    discovery_date = models.DateField('Date artifact was discovered')
+    discovery_year = models.IntegerField('Year fossil was discovered')
     period = models.CharField(max_length=50)
 
 class Artwork(Item):
