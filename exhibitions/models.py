@@ -6,6 +6,11 @@ CONDITION_CHOICES = [
     (3, ("Damaged"),)
 ]
 
+CONDITION_CHOICES_ORGANISM = [
+    (1, ("Live"),),
+    (2, ("Taxidermied"),)
+]
+
 class Gallery(models.Model):
     name = models.CharField(max_length=100)
 
@@ -44,7 +49,7 @@ class Artifact(Item):
 
 class Organism(Item):
     scientific_name = models.CharField(max_length=100)
-    condition = models.CharField(max_length=100)
+    condition = models.IntegerField(choices=CONDITION_CHOICES_ORGANISM)
 
 class Fossil(Item):
     country_origin = models.CharField(max_length=100)
