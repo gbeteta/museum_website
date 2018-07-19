@@ -32,6 +32,9 @@ class Item(models.Model):
     item_type = models.CharField(max_length=10)
     exhibition = models.ForeignKey(Exhibition, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.name
+
 class Artifact(Item):
     country_origin = models.CharField(max_length=100)
     excavation_site = models.CharField(max_length=150)
@@ -60,6 +63,9 @@ class Staff(models.Model):
     shift = models.CharField('Day or Night shift', max_length=50)
 
     works_in = models.ManyToManyField(Gallery)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name_plural = "Staff"
