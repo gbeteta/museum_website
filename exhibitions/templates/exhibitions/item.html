@@ -21,24 +21,96 @@
         {{ item.description }}
     </div>
 
-    {% if type == "Artifact" %}
-        <p class="font-weight-bold">Country of Origin: </p><p>{{ item.country_origin }}</p>
-        <p class="font-weight-bold">Excavation Site: </p><p>{{ item.excavation_site }}</p>
-        <p class="font-weight-bold">Discovery Year: </p><p>{{ item.discovery_year }}</p>
-        <p class="font-weight-bold">Condition: </p><p>{{ item.get_condition_display }}</p>
-        <p class="font-weight-bold">Material: </p><p>{{ item.material }}</p>
-    {% elif type == "Organism" %}
-        <p class="font-weight-bold">Scientific Name: </p><p>{{ item.scientific_name }}</p>
-        <p class="font-weight-bold">Condition: </p><p>{{ item.get_condition_display }}</p>
-    {% elif type == "Fossil" %}
-        <p class="font-weight-bold">Country of Origin: </p><p>{{ item.country_origin }}</p>
-        <p class="font-weight-bold">Excavation Site: </p><p>{{ item.excavation_site }}</p>
-        <p class="font-weight-bold">Discovery Year: </p><p>{{ item.discovery_year }}</p>
-        <p class="font-weight-bold">Period: </p><p>{{ item.period }}</p>
-    {% elif type == "Artwork" %}
-        <p class="font-weight-bold">Type: </p><p>{{ item.art_type }}</p>
-        <p class="font-weight-bold">Author: </p><p>{{ item.author }}</p>
-        <p class="font-weight-bold">From: </p><p>{{ item.year }}</p>
-    {% endif %}
+    <div style='display:inline-block; width: 30%; float: left; word-wrap: break-word'>
+        {% if type == "Artifact" %}
+            <p class="font-weight-bold">Country of Origin: </p><p>{{ item.country_origin }}</p>
+            <p class="font-weight-bold">Excavation Site: </p><p>{{ item.excavation_site }}</p>
+            <p class="font-weight-bold">Discovery Year: </p><p>{{ item.discovery_year }}</p>
+            <p class="font-weight-bold">Condition: </p><p>{{ item.get_condition_display }}</p>
+            <p class="font-weight-bold">Material: </p><p>{{ item.material }}</p>
+        {% elif type == "Organism" %}
+            <p class="font-weight-bold">Scientific Name: </p><p>{{ item.scientific_name }}</p>
+            <p class="font-weight-bold">Condition: </p><p>{{ item.get_condition_display }}</p>
+        {% elif type == "Fossil" %}
+            <p class="font-weight-bold">Country of Origin: </p><p>{{ item.country_origin }}</p>
+            <p class="font-weight-bold">Excavation Site: </p><p>{{ item.excavation_site }}</p>
+            <p class="font-weight-bold">Discovery Year: </p><p>{{ item.discovery_year }}</p>
+            <p class="font-weight-bold">Period: </p><p>{{ item.period }}</p>
+        {% elif type == "Artwork" %}
+            <p class="font-weight-bold">Type: </p><p>{{ item.art_type }}</p>
+            <p class="font-weight-bold">Author: </p><p>{{ item.author }}</p>
+            <p class="font-weight-bold">From: </p><p>{{ item.year }}</p>
+        {% endif %}
+    </div>
+
+    <div style='display:inline-block; width: 70%; float: right;'>
+        <h3>Similar Items</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    {% if type == "Artifact" %}
+                        <th>Origin</th>
+                        <th>Discovery Year</th>
+                        <th>Condition</th>
+                        <th>Material</th>
+                        <th>Exhibition</th>
+
+                    {% elif type == "Organism" %}
+                        <th>Scientific Name</th>
+                        <th>Condition</th>
+                        <th>Exhibition</th>
+
+                    {% elif type == "Fossil" %}
+                        <th>Origin</th>
+                        <th>Condition</th>
+                        <th>Period</th>
+                        <th>Exhibition</th>
+
+                    {% elif type == "Artwork" %}
+                        <th>Type</th>
+                        <th>Author</th>
+                        <th>Date</th>
+                        <th>Exhibition</th>
+                    {% endif %}
+                </tr>
+            </thead>
+    
+            <tbody>
+            
+                {% for _, s in suggestions %}
+                    <tr>
+                        <th scope="row"><a href="/item/{{ s.pk }}">{{ s.name }}</a></th>
+
+                        {% if type == "Artifact" %}
+                            <th>{{ s.country_origin }}</th>
+                            <th>{{ s.discovery_year }}</th>
+                            <th>{{ s.get_condition_display }}</th>
+                            <th>{{ s.material }}</th>
+                            <th>{{ s.exhibition.name }}</th>
+
+                        {% elif type == "Organism" %}
+                            <th>{{ s.scientific_name }}</th>
+                            <th>{{ s.condition }}</th>
+                            <th>{{ s.exhibition.name }}</th>
+
+                        {% elif type == "Fossil" %}
+                            <th>{{ s.country_origin }}</th>
+                            <th>{{ s.condition }}</th>
+                            <th>{{ s.period}}</th>
+                            <th>{{ s.exhibition.name }}</th>
+
+                        {% elif type == "Artwork" %}
+                            <th>{{ s.exhibition.art_type }}</th>
+                            <th>{{ s.exhibition.author }}</th>
+                            <th>{{ s.exhibition.year }}</th>
+                            <th>{{ s.exhibition.name }}</th>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+    
+            </tbody>
+        </table>
+    </div>
 
 {% endblock %}
