@@ -8,5 +8,6 @@ urlpatterns = [
     path('search_artifacts/', views.search_artifacts, name="Search Artifacts"),
     path('search_fossils/', views.search_fossils, name="Search Fossils"),
     path('search_artworks/', views.search_artworks, name="Search Artworks"),
+    path('item/<int:item_id>', views.get_item, name="Get Item"),
     path('', views.index, name='index')
 ]

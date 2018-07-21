@@ -1,11 +1,28 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 from .forms import SearchArtifactsForm, SearchArtworkForm, SearchFossilForm, SearchOrganismForm
 from .models import *
 
 def index(request):
     return render(request, 'exhibitions/index.html', {})
+
+def get_item(request, item_id):
+    if Item.objects.filter(pk=item_id).count():
+        item = Item.objects.get(pk=item_id)
+    else:
+        raise Http404("Item not found")
+
+    if item.artifact:
+        item = item.artifact
+    elif item.organism:
+        item = item.organism
+    elif item.fossil:
+        item = item.fossil
+    elif item.artword:
+        item = item.artwork
+    
+    return render(request, "exhibitions/item.html", {"item": item, "type": item.__class__.__name__})
 
 def search_artifacts(request):
     if request.method == 'POST':

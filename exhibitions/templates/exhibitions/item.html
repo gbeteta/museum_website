@@ -1,0 +1,44 @@
+{% extends 'exhibitions/base.html' %}
+
+{% block content %}
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/gallery/{{ item.exhibition.gallery.pk }}">{{ item.exhibition.gallery.name }}</a></li>
+            <li class="breadcrumb-item"><a href="/exhibitions/{{ item.exhibition.pk }}">{{ item.exhibition.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ item.name }}</li>
+        </ol>
+    </nav>
+
+    <p>
+        <h1>
+            {{ item.name }}
+            <small class="text-muted">{{ type }}</small>
+        </h1>
+    </p>
+
+    <div class="alert alert-light">
+        {{ item.description }}
+    </div>
+
+    {% if type == "Artifact" %}
+        <p class="font-weight-bold">Country of Origin: </p><p>{{ item.country_origin }}</p>
+        <p class="font-weight-bold">Excavation Site: </p><p>{{ item.excavation_site }}</p>
+        <p class="font-weight-bold">Discovery Year: </p><p>{{ item.discovery_year }}</p>
+        <p class="font-weight-bold">Condition: </p><p>{{ item.get_condition_display }}</p>
+        <p class="font-weight-bold">Material: </p><p>{{ item.material }}</p>
+    {% elif type == "Organism" %}
+        <p class="font-weight-bold">Scientific Name: </p><p>{{ item.scientific_name }}</p>
+        <p class="font-weight-bold">Condition: </p><p>{{ item.get_condition_display }}</p>
+    {% elif type == "Fossil" %}
+        <p class="font-weight-bold">Country of Origin: </p><p>{{ item.country_origin }}</p>
+        <p class="font-weight-bold">Excavation Site: </p><p>{{ item.excavation_site }}</p>
+        <p class="font-weight-bold">Discovery Year: </p><p>{{ item.discovery_year }}</p>
+        <p class="font-weight-bold">Period: </p><p>{{ item.period }}</p>
+    {% elif type == "Artwork" %}
+        <p class="font-weight-bold">Type: </p><p>{{ item.art_type }}</p>
+        <p class="font-weight-bold">Author: </p><p>{{ item.author }}</p>
+        <p class="font-weight-bold">From: </p><p>{{ item.year }}</p>
+    {% endif %}
+
+{% endblock %}
