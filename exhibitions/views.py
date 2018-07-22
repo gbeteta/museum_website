@@ -7,6 +7,24 @@ from .models import *
 def index(request):
     return render(request, 'exhibitions/index.html', {})
 
+def galleries(request):
+    galleries = Gallery.objects.all()
+    gallery_exhibitions = []
+
+    for g in galleries:
+        gallery_exhibitions.append((g,list(Exhibition.objects.filter(gallery=g))))
+
+    return render(request, 'exhibitions/galleries.html', {"galleries":gallery_exhibitions})
+
+def exhibitions(request):
+    exhibitions = Exhibition.objects.all()
+    exhibition_items = []
+
+    for i in exhibitions:
+        exhibition_items.append((i,list(Item.objects.filter(item=i))))
+    
+    return render(request, 'exhibitions/exhibitions.html', {"exhibitions":exhibition_items})
+
 def get_item(request, item_id):
     if Item.objects.filter(pk=item_id).exists():
         item = Item.objects.get(pk=item_id)
@@ -160,8 +178,8 @@ def search_artworks(request):
             if form.cleaned_data["author"]:
                 results = results.filter(author__icontains=form.cleaned_data["author"])
 
-            if form.cleaned_data["style"]:
-                results = results.filter(art_type__icontains=form.cleaned_data["style"])
+            if form.cleaned_data["art_type"]:
+                results = results.filter(art_type__icontains=form.cleaned_data["art_type"])
 
             return render(request, 'exhibitions/search_artworks.html', {'form': form, 'results': results})
     else:
