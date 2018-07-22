@@ -12,6 +12,7 @@
             <tr>
                 <th>Name</th>
                 <th>Author</th>
+                <th>Style</th>
                 <th>Year</th>
                 <th>Exhibition</th>
             </tr>
@@ -23,6 +24,7 @@
                 <tr>
                     <th scope="row"><a href="/item/{{ result.pk }}">{{ result.name }}</a></th>
                     <th>{{ result.author }}</th>
+                    <th>{{ result.art_type }}</th>
                     <th>{{ result.year }}</th>
                     <th>{{ result.exhibition }}</th>
                 </tr>
