@@ -42,7 +42,7 @@ def exhibition(request, exhibition_id):
     else:
         raise Http404("Item not found")
 
-    items = list(Item.objects.filter(exhibition=e)[:50])
+    items = list(Item.objects.filter(exhibition=e).order_by('name'))
 
     return render(request, 'exhibitions/exhibition.html', {"exhibition": e, "items": items})
 
@@ -66,10 +66,9 @@ def item(request, item_id):
     suggested = []
 
     if isinstance(item, Artifact):
-        partial_list = Artifact.objects.annotate(abs_diff=Func(F('discovery_year') - item.discovery_year, function='ABS')).order_by('abs_diff').exclude(pk__exact=item.pk)[:100]
+        partial_list = Artifact.objects.extra(select={'abs_diff': 'ABS(`discovery_year` - %s)',}, select_params=(item.discovery_year,)).order_by('abs_diff').exclude(pk=item.pk)[:100]
         suggested = list(map(list, zip([0 for i in range(len(partial_list))], partial_list)))
-        #suggested = list(map(list, zip([0 for i in range(Artifact.objects.all().count())], Artifact.objects.all().exclude(pk__exact=item.pk))))
-
+        
         for i in range(len(suggested)):
             item2 = suggested[i][1]
 
@@ -108,7 +107,7 @@ def item(request, item_id):
         suggested = list(sorted(suggested, key=lambda tup: tup[0]))[:10]
 
     elif isinstance(item, Fossil):
-        partial_list = Fossil.objects.annotate(abs_diff=Func(F('discovery_year') - item.discovery_year, function='ABS')).order_by('abs_diff').exclude(pk__exact=item.pk)[:100]
+        partial_list = Fossil.objects.extra(select={'abs_diff': 'ABS(`discovery_year` - %s)',}, select_params=(item.discovery_year,)).order_by('abs_diff').exclude(pk=item.pk)[:100]
         suggested = list(map(list, zip([0 for i in range(len(partial_list))], partial_list)))
 
         for i in range(len(suggested)):
@@ -130,9 +129,8 @@ def item(request, item_id):
         suggested = list(sorted(suggested, key=lambda tup: tup[0]))[:10]
 
     elif isinstance(item, Artwork):
-        partial_list = Artwork.objects.annotate(abs_diff=Func(abs(F('year') - item.year), function='ABS')).order_by('abs_diff').exclude(pk__exact=item.pk)[:100]
+        partial_list = Artwork.objects.extra(select={'abs_diff': 'ABS(`year` - %s)',}, select_params=(item.year,)).order_by('abs_diff').exclude(pk=item.pk)[:100]
         suggested = list(map(list, zip([0 for i in range(len(partial_list))], partial_list)))
-        #suggested = list(map(list, zip([0 for i in range(Artwork.objects.all().count())], Artwork.objects.all().exclude(pk__exact=item.pk))))
 
         for i in range(len(suggested)):
             item2 = suggested[i][1]
