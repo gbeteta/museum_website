@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
+from django.db.models import Func, F
 
 from .forms import SearchArtifactsForm, SearchArtworkForm, SearchFossilForm, SearchOrganismForm
 from .models import *
@@ -21,7 +22,7 @@ def exhibitions(request):
     exhibition_items = []
 
     for e in exhibitions:
-        exhibition_items.append((e, list(Item.objects.filter(exhibition=e))))
+        exhibition_items.append((e, list(Item.objects.filter(exhibition=e)[:10])))
     
     return render(request, 'exhibitions/exhibitions.html', {"exhibitions": exhibition_items})
 
@@ -41,7 +42,7 @@ def exhibition(request, exhibition_id):
     else:
         raise Http404("Item not found")
 
-    items = list(Item.objects.filter(exhibition=e))
+    items = list(Item.objects.filter(exhibition=e)[:50])
 
     return render(request, 'exhibitions/exhibition.html', {"exhibition": e, "items": items})
 
@@ -65,7 +66,9 @@ def item(request, item_id):
     suggested = []
 
     if isinstance(item, Artifact):
-        suggested = list(map(list, zip([0 for i in range(Artifact.objects.all().count())], Artifact.objects.all().exclude(pk__exact=item.pk))))
+        partial_list = Artifact.objects.annotate(abs_diff=Func(F('discovery_year') - item.discovery_year, function='ABS')).order_by('abs_diff').exclude(pk__exact=item.pk)[:100]
+        suggested = list(map(list, zip([0 for i in range(len(partial_list))], partial_list)))
+        #suggested = list(map(list, zip([0 for i in range(Artifact.objects.all().count())], Artifact.objects.all().exclude(pk__exact=item.pk))))
 
         for i in range(len(suggested)):
             item2 = suggested[i][1]
@@ -105,7 +108,8 @@ def item(request, item_id):
         suggested = list(sorted(suggested, key=lambda tup: tup[0]))[:10]
 
     elif isinstance(item, Fossil):
-        suggested = list(map(list, zip([0 for i in range(Fossil.objects.all().count())], Fossil.objects.all().exclude(pk__exact=item.pk))))
+        partial_list = Fossil.objects.annotate(abs_diff=Func(F('discovery_year') - item.discovery_year, function='ABS')).order_by('abs_diff').exclude(pk__exact=item.pk)[:100]
+        suggested = list(map(list, zip([0 for i in range(len(partial_list))], partial_list)))
 
         for i in range(len(suggested)):
             item2 = suggested[i][1]
@@ -126,7 +130,9 @@ def item(request, item_id):
         suggested = list(sorted(suggested, key=lambda tup: tup[0]))[:10]
 
     elif isinstance(item, Artwork):
-        suggested = list(map(list, zip([0 for i in range(Artwork.objects.all().count())], Artwork.objects.all().exclude(pk__exact=item.pk))))
+        partial_list = Artwork.objects.annotate(abs_diff=Func(abs(F('year') - item.year), function='ABS')).order_by('abs_diff').exclude(pk__exact=item.pk)[:100]
+        suggested = list(map(list, zip([0 for i in range(len(partial_list))], partial_list)))
+        #suggested = list(map(list, zip([0 for i in range(Artwork.objects.all().count())], Artwork.objects.all().exclude(pk__exact=item.pk))))
 
         for i in range(len(suggested)):
             item2 = suggested[i][1]
