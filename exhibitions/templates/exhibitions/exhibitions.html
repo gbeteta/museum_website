@@ -2,26 +2,30 @@
 
 {% block content %}
     
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="#">Our Galleries</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Exhibitions</li>
-  </ol>
-</nav>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/galleries/">Galleries</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Exhibitions</li>
+        </ol>
+    </nav>
 
-<h1>Exhibition contents</h1>
+    <h1>Our Exhibitions</h1>
 
-{% for g, items in exhibitions %}
-  <h3> {{ g.name }} </h3>
-  {% for e in items %}
-    <p>{{ e.name }}</p>
-  {% endfor %}
+    {% for e, items in exhibitions %}
+        
+        <h3>
+            {{ e.name }}
+            <small class="text-muted">At Gallery {{ e.gallery.name }}</small>
+        </h3>
 
-{% endfor %}
+        <ul>
+            {% for i in items %}
+                <li><a href="/item/{{ i.pk }}">{{ i.name }}</a></li>
+            {% endfor %}
+        </ul>
+        
+        <hr>
 
-
-
-
-
+    {% endfor %}
 
 {% endblock %}

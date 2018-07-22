@@ -14,16 +14,16 @@ def galleries(request):
     for g in galleries:
         gallery_exhibitions.append((g,list(Exhibition.objects.filter(gallery=g))))
 
-    return render(request, 'exhibitions/galleries.html', {"galleries":gallery_exhibitions})
+    return render(request, 'exhibitions/galleries.html', {"galleries": gallery_exhibitions})
 
 def exhibitions(request):
     exhibitions = Exhibition.objects.all()
     exhibition_items = []
 
-    for i in exhibitions:
-        exhibition_items.append((i,list(Item.objects.filter(item=i))))
+    for e in exhibitions:
+        exhibition_items.append((e, list(Item.objects.filter(exhibition=e))))
     
-    return render(request, 'exhibitions/exhibitions.html', {"exhibitions":exhibition_items})
+    return render(request, 'exhibitions/exhibitions.html', {"exhibitions": exhibition_items})
 
 def get_item(request, item_id):
     if Item.objects.filter(pk=item_id).exists():
