@@ -30,5 +30,5 @@ if __name__ == "__main__":
 
                 if not Artwork.objects.filter(author=row[2], name=row[5], art_type=row[7], year=row[9], exhibition=e).exists():
                         print(row[0], row[2], row[5], row[9])
-                        Artwork.objects.create(author=row[2], name=row[5], art_type=row[7], year=row[9], exhibition=e)
+                        Artwork.objects.create(author=row[2], name=full_name, art_type=row[7], year=row[9], exhibition=e)
                 
