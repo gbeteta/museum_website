@@ -1,0 +1,22 @@
+{% extends 'exhibitions/base.html' %}
+
+{% block content %}
+    
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/gallery/{{ exhibition.gallery.pk }}">{{ exhibition.gallery.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ exhibition.name }}</li>
+        </ol>
+    </nav>
+
+    <h3>{{ exhibition.name }}</h3>
+
+    <ul>
+        {% for i in items %}
+            <li><a href="/item/{{ i.pk }}">{{ i.name }}</a></li>
+        {% endfor %}
+    </ul>
+    
+    <hr>
+
+{% endblock %}
