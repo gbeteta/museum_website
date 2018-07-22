@@ -26,7 +26,7 @@
                     <th>{{ result.discovery_year }}</th>
                     <th>{{ result.get_condition_display }}</th>
                     <th>{{ result.material }}</th>
-                    <th>{{ result.exhibition }}</th>
+                    <th><a href="/exhibition/{{ result.exhibition.pk }}">{{ result.exhibition }}</a></th>
                 </tr>
             {% endfor %}
 

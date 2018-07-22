@@ -5,7 +5,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/gallery/{{ item.exhibition.gallery.pk }}">{{ item.exhibition.gallery.name }}</a></li>
-            <li class="breadcrumb-item"><a href="/exhibitions/{{ item.exhibition.pk }}">{{ item.exhibition.name }}</a></li>
+            <li class="breadcrumb-item"><a href="/exhibition/{{ item.exhibition.pk }}">{{ item.exhibition.name }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ item.name }}</li>
         </ol>
     </nav>
@@ -54,25 +54,23 @@
                         <th>Discovery Year</th>
                         <th>Condition</th>
                         <th>Material</th>
-                        <th>Exhibition</th>
 
                     {% elif type == "Organism" %}
                         <th>Scientific Name</th>
                         <th>Condition</th>
-                        <th>Exhibition</th>
 
                     {% elif type == "Fossil" %}
                         <th>Origin</th>
                         <th>Condition</th>
                         <th>Period</th>
-                        <th>Exhibition</th>
 
                     {% elif type == "Artwork" %}
                         <th>Type</th>
                         <th>Author</th>
                         <th>Date</th>
-                        <th>Exhibition</th>
                     {% endif %}
+
+                    <th>Exhibition</th>
                 </tr>
             </thead>
     
@@ -87,25 +85,23 @@
                             <th>{{ s.discovery_year }}</th>
                             <th>{{ s.get_condition_display }}</th>
                             <th>{{ s.material }}</th>
-                            <th>{{ s.exhibition.name }}</th>
 
                         {% elif type == "Organism" %}
                             <th>{{ s.scientific_name }}</th>
                             <th>{{ s.condition }}</th>
-                            <th>{{ s.exhibition.name }}</th>
 
                         {% elif type == "Fossil" %}
                             <th>{{ s.country_origin }}</th>
                             <th>{{ s.condition }}</th>
                             <th>{{ s.period}}</th>
-                            <th>{{ s.exhibition.name }}</th>
 
                         {% elif type == "Artwork" %}
                             <th>{{ s.art_type }}</th>
                             <th>{{ s.author }}</th>
                             <th>{{ s.year }}</th>
-                            <th>{{ s.exhibition.name }}</th>
                         {% endif %}
+                        
+                        <th><a href="/exhibition/{{ s.exhibition.pk }}">{{ s.exhibition.name }}</a></th>
                     </tr>
                 {% endfor %}
     

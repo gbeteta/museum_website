@@ -12,7 +12,7 @@ def galleries(request):
     gallery_exhibitions = []
 
     for g in galleries:
-        gallery_exhibitions.append((g,list(Exhibition.objects.filter(gallery=g))))
+        gallery_exhibitions.append((g, list(Exhibition.objects.filter(gallery=g))))
 
     return render(request, 'exhibitions/galleries.html', {"galleries": gallery_exhibitions})
 
@@ -25,7 +25,27 @@ def exhibitions(request):
     
     return render(request, 'exhibitions/exhibitions.html', {"exhibitions": exhibition_items})
 
-def get_item(request, item_id):
+def gallery(request, gallery_id):
+    if Gallery.objects.filter(pk=gallery_id).exists():
+        g = Gallery.objects.get(pk=gallery_id)
+    else:
+        raise Http404("Item not found")
+
+    exhibitions = Exhibition.objects.filter(gallery=g)
+
+    return render(request, 'exhibitions/gallery.html', {"gallery": g, "exhibitions": exhibitions})
+
+def exhibition(request, exhibition_id):
+    if Exhibition.objects.filter(pk=exhibition_id).exists():
+        e = Exhibition.objects.get(pk=exhibition_id)
+    else:
+        raise Http404("Item not found")
+
+    items = list(Item.objects.filter(exhibition=e))
+
+    return render(request, 'exhibitions/exhibition.html', {"exhibition": e, "items": items})
+
+def item(request, item_id):
     if Item.objects.filter(pk=item_id).exists():
         item = Item.objects.get_subclass(pk=item_id)
     else:
