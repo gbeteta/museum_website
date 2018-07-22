@@ -1,4 +1,5 @@
 from django.db import models
+from model_utils.managers import InheritanceManager
 
 CONDITION_CHOICES = [
     (1, ("Preserved"),),
@@ -34,8 +35,10 @@ class Exhibition(models.Model):
 class Item(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField('Item description')
-    item_type = models.CharField(max_length=10)
     exhibition = models.ForeignKey(Exhibition, on_delete=models.CASCADE)
+
+    # Manage inheritance (one-to-one Item types)
+    objects = InheritanceManager()
 
     def __str__(self):
         return self.name

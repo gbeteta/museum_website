@@ -27,7 +27,7 @@ def exhibitions(request):
 
 def get_item(request, item_id):
     if Item.objects.filter(pk=item_id).exists():
-        item = Item.objects.get(pk=item_id)
+        item = Item.objects.get_subclass(pk=item_id)
     else:
         raise Http404("Item not found")
 
@@ -44,8 +44,7 @@ def get_item(request, item_id):
 
     suggested = []
 
-    if item.artifact:
-        item = item.artifact
+    if isinstance(item, Artifact):
         suggested = list(map(list, zip([0 for i in range(Artifact.objects.all().count())], Artifact.objects.all().exclude(pk__exact=item.pk))))
 
         for i in range(len(suggested)):
@@ -67,8 +66,7 @@ def get_item(request, item_id):
 
         suggested = list(sorted(suggested, key=lambda tup: tup[0]))[:10]
 
-    elif item.organism:
-        item = item.organism
+    elif isinstance(item, Organism):
         suggested = list(map(list, zip([0 for i in range(Organism.objects.all().count())], Organism.objects.all().exclude(pk__exact=item.pk))))
 
         for i in range(len(suggested)):
@@ -86,8 +84,7 @@ def get_item(request, item_id):
 
         suggested = list(sorted(suggested, key=lambda tup: tup[0]))[:10]
 
-    elif item.fossil:
-        item = item.fossil
+    elif isinstance(item, Fossil):
         suggested = list(map(list, zip([0 for i in range(Fossil.objects.all().count())], Fossil.objects.all().exclude(pk__exact=item.pk))))
 
         for i in range(len(suggested)):
@@ -108,8 +105,7 @@ def get_item(request, item_id):
 
         suggested = list(sorted(suggested, key=lambda tup: tup[0]))[:10]
 
-    elif item.artwork:
-        item = item.artwork
+    elif isinstance(item, Artwork):
         suggested = list(map(list, zip([0 for i in range(Artwork.objects.all().count())], Artwork.objects.all().exclude(pk__exact=item.pk))))
 
         for i in range(len(suggested)):
