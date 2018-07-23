@@ -100,7 +100,7 @@ def item(request, item_id):
             name_score = name_similarity(item.name, item2.name)
             exhibition_score = 1 if item.exhibition.pk != item2.exhibition.pk else 0
             
-            sci_name_score = 1 if item.sci_name_score != item2.sci_name_score else 0
+            sci_name_score = 1 if item.scientific_name != item2.scientific_name else 0
             condition_score = 1 if item.condition != item2.condition else 0
 
             total_score = name_score + (exhibition_score * 2)
