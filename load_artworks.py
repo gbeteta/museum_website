@@ -14,21 +14,21 @@ if __name__ == "__main__":
         e = Exhibition.objects.get(name="Art from Tate Museum")
         
         for row in art_reader:
-            if int(row[0]) % 2 == 0:
-                continue
-
-            if Artwork.objects.filter(author=row[2]).count() > 70:
-                continue
 
             if row[2] and row[5] and row[7] and row[9]:
-                if row[5] == "[title not known]":
+                if len(row[5]) < 3 or row[5][0] == "[":
                     continue
                     
                 if ',' in row[2]:
                     last_name = row[2].split(",")[0]
                     full_name = row[2].split(", ")[1] + " " + last_name
+                else:
+                    full_name = row[2]
 
-                if not Artwork.objects.filter(author=row[2], name=row[5], art_type=row[7], year=row[9], exhibition=e).exists():
+                if Artwork.objects.filter(author=full_name).count() >= 10:
+                    continue
+
+                if not Artwork.objects.filter(author=full_name, name=row[5], art_type=row[7], year=row[9], exhibition=e).exists():
                         print(row[0], row[2], row[5], row[9])
-                        Artwork.objects.create(author=row[2], name=full_name, art_type=row[7], year=row[9], exhibition=e)
+                        Artwork.objects.create(author=full_name, name=row[5], art_type=row[7], year=row[9], exhibition=e)
                 

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.db.models import Func, F
+from django.views.decorators.cache import cache_page
 
 from .forms import SearchArtifactsForm, SearchArtworkForm, SearchFossilForm, SearchOrganismForm
 from .models import *
@@ -36,6 +37,7 @@ def gallery(request, gallery_id):
 
     return render(request, 'exhibitions/gallery.html', {"gallery": g, "exhibitions": exhibitions})
 
+@cache_page(60 * 15)
 def exhibition(request, exhibition_id):
     if Exhibition.objects.filter(pk=exhibition_id).exists():
         e = Exhibition.objects.get(pk=exhibition_id)
@@ -46,6 +48,7 @@ def exhibition(request, exhibition_id):
 
     return render(request, 'exhibitions/exhibition.html', {"exhibition": e, "items": items})
 
+@cache_page(60 * 30)
 def item(request, item_id):
     if Item.objects.filter(pk=item_id).exists():
         item = Item.objects.get_subclass(pk=item_id)
@@ -176,7 +179,7 @@ def search_artifacts(request):
             if form.cleaned_data["material"]:
                 results = results.filter(material__iexact=form.cleaned_data["material"])
 
-            return render(request, 'exhibitions/search_artifacts.html', {'form': form, 'results': results})
+            return render(request, 'exhibitions/search_artifacts.html', {'form': form, 'results': results[:250]})
     else:
         form = SearchArtifactsForm()
 
@@ -201,7 +204,7 @@ def search_artworks(request):
             if form.cleaned_data["art_type"]:
                 results = results.filter(art_type__icontains=form.cleaned_data["art_type"])
 
-            return render(request, 'exhibitions/search_artworks.html', {'form': form, 'results': results})
+            return render(request, 'exhibitions/search_artworks.html', {'form': form, 'results': results[:250]})
     else:
         form = SearchArtworkForm()
 
@@ -229,7 +232,7 @@ def search_fossils(request):
             if form.cleaned_data["period"]:
                 results = results.filter(period__icontains=form.cleaned_data["period"])
 
-            return render(request, 'exhibitions/search_fossils.html', {'form': form, 'results': results})
+            return render(request, 'exhibitions/search_fossils.html', {'form': form, 'results': results[:250]})
     else:
         form = SearchFossilForm()
 
@@ -251,7 +254,7 @@ def search_organisms(request):
             if form.cleaned_data["condition"] != '0':
                 results = results.filter(condition__exact=int(form.cleaned_data["condition"]))
 
-            return render(request, 'exhibitions/search_organisms.html', {'form': form, 'results': results})
+            return render(request, 'exhibitions/search_organisms.html', {'form': form, 'results': results[:250]})
     else:
         form = SearchOrganismForm()
 
